@@ -1,0 +1,74 @@
+{% extends "./base.html" %}
+
+{% load static %}
+
+
+{% block content %}
+
+
+<main>
+  
+  <div class="album py-5 bg-light">
+    <div class="container">
+
+      {% if category.slug %}
+                <a class="dropdown-item" href="{% url 'list-category' category_slug=category.slug %}">
+                    {{ category.name | capfirst }}
+                </a>
+            {% else %}
+                <!-- Handle the case where the category slug is empty -->
+                <span>Invalid Category</span>
+            {% endif %}
+      <hr>
+
+      <br>
+
+
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-5 g-3">
+
+      
+        {% for product in page_obj %}
+
+        <div class="col">
+          <div class="card shadow-sm">
+          <img class="img-fluid" alt="Responsive image" src="{{product.image.url}}">
+
+            <div class="card-body">
+              <p class="card-text">
+                <a class="text-info text-decoration-none" href="{{product.get_absolute_url}}"> {{product.title}} </a>
+              </p>
+              <div class="d-flex justify-content-between align-items-center">
+                <h5> $ {{product.price}} </h5>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {% endfor %}
+        
+
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+      </div>
+    </div>
+  </div>
+
+
+</main>
+
+{% endblock %}
